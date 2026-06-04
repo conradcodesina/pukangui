@@ -1,0 +1,47 @@
+{
+  "name": "pukangui",
+  "author": "蒲康 (Pukang)",
+  "version": "1.0.4",
+  "license": "MIT",
+  "keywords": [
+    "pukangui",
+    "pukang",
+    "pu-kang-ui",
+    "vue",
+    "vue3",
+    "vue-component",
+    "component-library",
+    "ui",
+    "ui-library",
+    "components"
+  ],
+  "type": "module",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "main": "./dist/pukang-ui.umd.cjs",
+  "module": "./dist/pukang-ui.es.js",
+  "types": "./types/index.d.ts",
+  "style": "./dist/pukang-ui.css",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/pukang-ui.es.js",
+      "require": "./dist/pukang-ui.umd.cjs"
+    },
+    "./pukang-ui.css": "./dist/pukang-ui.css",
+    "./style.css": "./dist/pukang-ui.css",
+    "./dist/pukang-ui.css": "./dist/pukang-ui.css"
+  },
+  "scripts": {
+    "gen:exports": "node scripts/generate-exports.js",
+    "build": "npm run gen:exports && vite build"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "dependencies": {
+    "font-awesome": "^4.7.0"
+  }
+}
