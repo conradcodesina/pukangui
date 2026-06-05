@@ -1,6 +1,6 @@
 <template>
-  <span class="icon">{{iconMap[pops.icon]}}</span>
-  <span class="font">{{pops.message}}</span>
+  <span class="pk-message__icon">{{iconMap[pops.icon]}}</span>
+  <span class="pk-message__content">{{pops.message}}</span>
 </template>
 <script>
 /**
@@ -30,7 +30,7 @@ const pops=defineProps({
 })
 </script>
 <style lang="scss">
-.message_warpper {
+.pk-message {
   box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
   padding: 7px 11px;
   border-radius: 3px;
@@ -45,29 +45,29 @@ const pops=defineProps({
     font-size: 14px;
   }
 
-  .icon {
+  .pk-message__icon {
     margin-right: 10px;
   }
 }
-.success {
+.pk-message--success {
   background-color: #FFFFFF;
   border-color: #67c23a;
   color: #67c23a;
 }
 
-.warning {
+.pk-message--warning {
   background-color: #FFFFFF;
   border-color: #E6A23C;
   color: #E6A23C;
 }
 
-.error {
+.pk-message--error {
   background-color: #FFFFFF;
   border-color: #F56C6C;
   color: #F56C6C;
 }
 
-.info {
+.pk-message--info {
   background-color: #FFFFFF;
   border-color: #909399;
   color: #909399;

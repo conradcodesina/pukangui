@@ -15,6 +15,7 @@
         'has-prefix': hasPrefix,
         'has-suffix': hasSuffix,
         'has-action': hasAction,
+        'is-textarea': isTextarea,
       },
     ]"
     :style="inputStyle"
@@ -26,6 +27,7 @@
     </span>
 
     <input
+      v-if="!isTextarea"
       ref="inputRef"
       v-bind="$attrs"
       class="pk-input__inner"
@@ -35,6 +37,26 @@
       :disabled="disabled"
       :readonly="readonly"
       :maxlength="maxlength"
+      :autocomplete="autocomplete"
+      @input="handleInput"
+      @change="handleChange"
+      @focus="handleFocus"
+      @blur="handleBlur"
+      @compositionstart="handleCompositionStart"
+      @compositionend="handleCompositionEnd"
+    />
+
+    <textarea
+      v-else
+      ref="inputRef"
+      v-bind="$attrs"
+      class="pk-input__inner pk-input__textarea"
+      :value="inputValue"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :readonly="readonly"
+      :maxlength="maxlength"
+      :rows="normalizedRows"
       :autocomplete="autocomplete"
       @input="handleInput"
       @change="handleChange"
@@ -75,7 +97,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, ref, useSlots } from 'vue'
+import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
 
 defineOptions({
   name: 'PkInput',
@@ -119,6 +141,14 @@ const props = defineProps({
     type: [String, Number],
     default: undefined,
   },
+  rows: {
+    type: [String, Number],
+    default: 2,
+  },
+  autosize: {
+    type: [Boolean, Object],
+    default: false,
+  },
   autocomplete: {
     type: String,
     default: 'off',
@@ -147,6 +177,11 @@ const inputValue = computed(() => (props.modelValue ?? '').toString())
 const inputStyle = computed(() => ({ width: props.width }))
 const hasPrefix = computed(() => Boolean(slots.prefix || slots.after))
 const hasSuffix = computed(() => Boolean(slots.suffix || slots.before))
+const isTextarea = computed(() => props.type === 'textarea')
+const normalizedRows = computed(() => {
+  const rows = Number(props.rows)
+  return Number.isFinite(rows) && rows > 0 ? rows : 2
+})
 const nativeType = computed(() => {
   if (props.type !== 'password' || !props.showPassword) return props.type
   return passwordVisible.value ? 'text' : 'password'
@@ -155,13 +190,39 @@ const showClear = computed(() => {
   return props.clearable && !props.disabled && !props.readonly && inputValue.value.length > 0
 })
 const showPasswordToggle = computed(() => {
-  return props.type === 'password' && props.showPassword && !props.disabled
+  return !isTextarea.value && props.type === 'password' && props.showPassword && !props.disabled
 })
 const hasAction = computed(() => showClear.value || showPasswordToggle.value)
+
+const getTextareaLineHeight = (textarea) => {
+  const lineHeight = Number.parseFloat(window.getComputedStyle(textarea).lineHeight)
+  return Number.isFinite(lineHeight) ? lineHeight : 20
+}
+
+const resizeTextarea = () => {
+  if (!isTextarea.value || !props.autosize || !inputRef.value) return
+
+  const textarea = inputRef.value
+  const lineHeight = getTextareaLineHeight(textarea)
+  const autosize = typeof props.autosize === 'object' ? props.autosize : {}
+  const minRows = Number(autosize.minRows ?? normalizedRows.value)
+  const maxRows = Number(autosize.maxRows)
+  const minHeight = Number.isFinite(minRows) && minRows > 0 ? minRows * lineHeight : normalizedRows.value * lineHeight
+  const maxHeight = Number.isFinite(maxRows) && maxRows > 0 ? maxRows * lineHeight : null
+
+  textarea.style.height = 'auto'
+
+  const nextHeight = Math.max(textarea.scrollHeight, minHeight)
+  const finalHeight = maxHeight ? Math.min(nextHeight, maxHeight) : nextHeight
+
+  textarea.style.height = `${finalHeight}px`
+  textarea.style.overflowY = maxHeight && nextHeight > maxHeight ? 'auto' : 'hidden'
+}
 
 const setValue = (value, event) => {
   emit('update:modelValue', value)
   emit('input', value, event)
+  nextTick(resizeTextarea)
 }
 
 const handleInput = (event) => {
@@ -215,6 +276,16 @@ defineExpose({
   focus,
   blur,
   clear,
+})
+
+watch(
+  () => [props.modelValue, props.rows, props.autosize],
+  () => nextTick(resizeTextarea),
+  { deep: true },
+)
+
+onMounted(() => {
+  nextTick(resizeTextarea)
 })
 </script>
 
@@ -355,5 +426,25 @@ defineExpose({
 
 .pk-input.is-readonly {
   background-color: #fafafa;
+}
+
+.pk-input.is-textarea {
+  align-items: flex-start;
+  min-height: auto;
+
+  .pk-input__prefix,
+  .pk-input__suffix {
+    height: auto;
+    min-height: calc(var(--pk-input-height) - 2px);
+    padding-top: 8px;
+  }
+}
+
+.pk-input__textarea {
+  height: auto;
+  min-height: calc(var(--pk-input-height) - 2px);
+  padding: 8px 12px;
+  line-height: 1.5;
+  resize: vertical;
 }
 </style>

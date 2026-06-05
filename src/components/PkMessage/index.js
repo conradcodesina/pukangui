@@ -10,7 +10,7 @@ const BASE_TOP = 30; // 基础 top 值
 
 const PkMessageCheck = (option,duration=3000) => {
     const div = document.createElement('div');
-    div.classList.add(option.type, 'message_warpper','show');
+    div.classList.add(`pk-message--${option.type}`, 'pk-message', 'message_warpper','show');
     const len = document.getElementsByClassName('message_warpper').length;
     div.style.top = `${BASE_TOP + len * HEIGHT-10}px`;
     setTimeout(() => {

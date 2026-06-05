@@ -1,5 +1,5 @@
 <template>
-  <button  class="pk-button" :class="[size, round,plain,type,disable,circle]" :disabled="isDisable">
+  <button class="pk-button" :class="buttonClasses" :disabled="isDisable">
     <slot></slot>
   </button >
 </template>
@@ -44,6 +44,14 @@ const props = defineProps({
 const isDisable=computed(() => {
   return props.disable === 'disable';
 })
+const buttonClasses = computed(() => [
+  props.size && `pk-button--${props.size}`,
+  props.round && 'pk-button--round',
+  props.plain && 'pk-button--plain',
+  props.type && `pk-button--${props.type}`,
+  props.disable && 'pk-button--disable',
+  props.circle && 'pk-button--circle'
+].filter(Boolean))
 </script>
 
 <style scoped lang="scss">
@@ -61,7 +69,7 @@ const isDisable=computed(() => {
   background-color: #ffffff;
 }
 
-.default{
+.pk-button--default{
   border:1px solid #dcdfe6;
   color: #606266;
   background-color: #ffffff;
@@ -77,10 +85,10 @@ const isDisable=computed(() => {
     outline: none;
   }
 }
-.disable{
+.pk-button--disable{
   cursor: not-allowed;
 }
-.default.disable{
+.pk-button--default.pk-button--disable{
   border:1px solid #dcdfe6;
   color: #606266;
   background-color: #ffffff;
@@ -90,14 +98,14 @@ const isDisable=computed(() => {
     background-color: #ffffff;
   }
 }
-.default.plain{
+.pk-button--default.pk-button--plain{
   &:hover,&:active{
     background: #ffffff;
     border-color: #409eff;
     color: #409eff;
   }
 }
-.primary{
+.pk-button--primary{
   color: #fff;
   background-color: #409eff;
   border-color: #409eff;
@@ -107,7 +115,7 @@ const isDisable=computed(() => {
     border-color: #66b1ff;
   }
 }
-.primary.plain{
+.pk-button--primary.pk-button--plain{
   color: #409eff;
   background-color: #ecf5ff;
   border-color: #b3d8ff;
@@ -117,7 +125,7 @@ const isDisable=computed(() => {
     border-color: #409eff;
   }
 }
-.primary.disable{
+.pk-button--primary.pk-button--disable{
   color: #fff;
   background-color: #a0cfff;
   border-color: #a0cfff;
@@ -127,7 +135,7 @@ const isDisable=computed(() => {
     border-color: #a0cfff;
   }
 }
-.success{
+.pk-button--success{
   color: #fff;
   background-color: #67c23a;
   border-color: #67c23a;
@@ -142,7 +150,7 @@ const isDisable=computed(() => {
     border-color: #529b2e;
   }
 }
-.success.plain{
+.pk-button--success.pk-button--plain{
   color: #67c23a;
   background-color: #f0f9eb;
   border-color: #c2e7b0;
@@ -157,7 +165,7 @@ const isDisable=computed(() => {
     border-color: #529b2e;
   }
 }
-.success.disable{
+.pk-button--success.pk-button--disable{
   color: #fff;
   background-color: #b3e19d;
   border-color: #b3e19d;
@@ -167,7 +175,7 @@ const isDisable=computed(() => {
     border-color: #b3e19d;
   }
 }
-.info{
+.pk-button--info{
   color: #fff;
   background-color: #909399;
   border-color: #909399;
@@ -182,7 +190,7 @@ const isDisable=computed(() => {
     border-color: #767980;
   }
 }
-.info.plain{
+.pk-button--info.pk-button--plain{
   color: #909399;
   background-color: #f4f4f5;
   border-color: #d3d4d6;
@@ -197,7 +205,7 @@ const isDisable=computed(() => {
     border-color: #767980;
   }
 }
-.info.disable{
+.pk-button--info.pk-button--disable{
   color: #fff;
   background-color: #c8c9cc;
   border-color: #c8c9cc;
@@ -207,7 +215,7 @@ const isDisable=computed(() => {
     border-color: #c8c9cc;
   }
 }
-.warning{
+.pk-button--warning{
   color: #fff;
   background-color: #e6a23c;
   border-color: #e6a23c;
@@ -222,7 +230,7 @@ const isDisable=computed(() => {
     border-color: #e6a23c;
   }
 }
-.warning.plain{
+.pk-button--warning.pk-button--plain{
   color: #e6a23c;
   background-color: #fdf6ec;
   border-color: #f5dab1;
@@ -237,7 +245,7 @@ const isDisable=computed(() => {
     border-color: #e6a23c;
   }
 }
-.warning.disable{
+.pk-button--warning.pk-button--disable{
   color: #fff;
   background-color: #f3d19e;
   border-color: #f3d19e;
@@ -247,7 +255,7 @@ const isDisable=computed(() => {
     border-color: #f3d19e;
   }
 }
-.danger{
+.pk-button--danger{
   color: #fff;
   background-color: #f56c6c;
   border-color: #f56c6c;
@@ -262,7 +270,7 @@ const isDisable=computed(() => {
     border-color: #f23c3c;
   }
 }
-.danger.plain{
+.pk-button--danger.pk-button--plain{
   color: #f56c6c;
   background-color: #fef0f0;
   border-color: #fbc4c4;
@@ -277,7 +285,7 @@ const isDisable=computed(() => {
     border-color: #f23c3c;
   }
 }
-.danger.disable{
+.pk-button--danger.pk-button--disable{
   color: #fff;
   background-color: #fab6b6;
   border-color: #fab6b6;
@@ -287,28 +295,28 @@ const isDisable=computed(() => {
     border-color: #fab6b6;
   }
 }
-.round{
+.pk-button--round{
   border-radius: 20px;
 }
-.medium{
+.pk-button--medium{
   min-height: 36px;
   padding: 10px 20px;
   font-size: 14px;
   border:1px solid #dcdfe6;
 }
-.small{
+.pk-button--small{
   min-height: 32px;
   padding: 9px 15px;
   font-size: 12px;
   border:1px solid #dcdfe6;
 }
-.mini{
+.pk-button--mini{
   min-height: 28px;
   padding: 7px 15px;
   font-size: 12px;
   border:1px solid #dcdfe6;
 }
-.circle{
+.pk-button--circle{
   border-radius: 50%;
   padding: 12px;
 }
