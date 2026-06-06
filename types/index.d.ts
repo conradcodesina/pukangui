@@ -46,6 +46,7 @@ export const PkFormItem: PkComponent
 export const PkHeader: PkComponent
 export const PkInput: PkComponent
 export const PkMain: PkComponent
+export const PkPanel: PkComponent
 export const PkPagination: PkComponent
 export const PkScrollbar: PkComponent
 export const PkSearch: PkComponent
@@ -82,6 +83,7 @@ declare module '@vue/runtime-core' {
     PkHeader: typeof PkHeader
     PkInput: typeof PkInput
     PkMain: typeof PkMain
+    PkPanel: typeof PkPanel
     PkPagination: typeof PkPagination
     PkScrollbar: typeof PkScrollbar
     PkSearch: typeof PkSearch

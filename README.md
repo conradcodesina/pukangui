@@ -154,6 +154,51 @@ const columns = [
 ]
 ```
 
+### Panel 面板布局
+
+`pk-panel` 用来快速搭建面板矩阵、看板区域和瀑布流布局。常用参数包括：
+
+- `rows`：横向排几行。
+- `columns`：竖向排几列。
+- `mode`：布局模式，支持 `grid` 和 `waterfall`。
+- `gap`：面板之间的间距。
+- `height`：容器高度，固定行数时建议传入。
+- `autoFit`：是否根据最小宽度自动适配列数。
+- `minItemWidth`：每个面板的最小宽度，常和 `autoFit` 一起使用。
+
+固定 3 列 2 行：
+
+```vue
+<pk-panel :rows="2" :columns="3" gap="16px" height="360px">
+  <div>面板 1</div>
+  <div>面板 2</div>
+  <div>面板 3</div>
+  <div>面板 4</div>
+  <div>面板 5</div>
+  <div>面板 6</div>
+</pk-panel>
+```
+
+自动适配列宽：
+
+```vue
+<pk-panel auto-fit min-item-width="220px" gap="14px">
+  <div>数据接入</div>
+  <div>任务编排</div>
+  <div>报表中心</div>
+</pk-panel>
+```
+
+瀑布流布局：
+
+```vue
+<pk-panel mode="waterfall" :columns="3" gap="16px">
+  <div style="height: 120px">信息卡片</div>
+  <div style="height: 180px">更高的信息卡片</div>
+  <div style="height: 140px">信息卡片</div>
+</pk-panel>
+```
+
 ### Dialog 对话框
 
 ```vue
@@ -189,6 +234,7 @@ const columns = [
 - `PkMessageBox` 消息弹框
 - `PkNotification` 通知
 - `PkContainer` 容器
+- `PkPanel` 面板布局
 - `PkHeader` 头部容器
 - `PkAside` 侧边栏容器
 - `PkMain` 主体容器

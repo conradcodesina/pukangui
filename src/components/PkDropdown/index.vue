@@ -169,7 +169,7 @@ onBeforeUnmount(() => {
 .pk-dropdown__menu {
   position: absolute;
   top: calc(100% + 6px);
-  left: 0;
+  left: -40px;
   z-index: 2200;
   min-width: 140px;
   padding: 6px;
